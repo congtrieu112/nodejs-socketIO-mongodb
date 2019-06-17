@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+
+  <title>Hello , soket IO</title>
+</head>
+
+<body>
+  <h1>Hello, Soket IO!</h1>
+  <form action="" method="post" id="submit-send">
+    <div class="form-group">
+      <label for="send-message">Send message</label>
+      <input type="text" name="" id="send-message" class="form-control" placeholder="" aria-describedby="helpId">
+      <button type="submit" name="" id="" class="btn btn-primary" btn-lg btn-block">Sent message</button>
+    </div>
+  </form>
+
+  <!-- import soketio js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script src="http://code.jquery.com/jquery-1.7.2.js"></script>
+  <script>
+    var socket = io.connect("localhost:9090?token=dinhcongtrieu");
+    var cfs = false;
+    var classCfsId = null;
+    socket.on("message", data => {
+      console.log(data);
+    });
+    $(document).ready((e) => {
+      $("#submit-send").submit((e) => {
+        var message = {
+          from: 'myles',
+          to: 'congeries'
+        }
+        socket.emit('message', message);
+        return false;
+      })
+      $(window).on('keydown', event => {
+        if (event.keyCode == 37) {
+          alert('Left was pressed');
+        }
+        else if (event.keyCode == 39) {
+          alert('Right was pressed');
+        }
+        else if (event.keyCode === 121) {
+          // alert('typed f10')
+          cfs = true;
+          var cfsData = {
+            from: 'client',
+            to: 'creat cfs'
+          };
+          createCfs();
+          $('#send-message').removeClass(classCfsId);
+          // socket.emit('list-new-cfs', cfsData);
+        }
+      })
+      socket.on("list-new-cfs", data => {
+        console.log(data);
+      });
+
+      function createCfs() {
+        console.log(34234);
+        $.ajax({
+          url: "http://localhost:9090/create-cfs",
+          type: "post",
+          data: {},
+          success: function (response) {
+            // you will get response from your php page (what you echo or print)                 
+            console.log(response)
+            classCfsId = `cfs-${response._id}`;
+            $('#send-message').addClass(classCfsId);
+
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+          }
+
+
+        });
+      }
+
+
+
+
+
+
+    });
+
+    // document.addEventListener('keydown', function (event) {
+    //   if (event.keyCode == 37) {
+    //     alert('Left was pressed');
+    //   }
+    //   else if (event.keyCode == 39) {
+    //     alert('Right was pressed');
+    //   }
+    //   else if (event.keyCode === 121) {
+    //     alert('typed f10')
+    //   }
+    // });
+
+
+  </script>
+</body>
+
+</html>

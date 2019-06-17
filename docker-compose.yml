@@ -1,0 +1,5 @@
+adminer:
+  image: dockette/adminer:full-php5
+  restart: always
+  ports:
+    - 1990:80
