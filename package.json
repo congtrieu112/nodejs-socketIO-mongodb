@@ -23,7 +23,7 @@
     "mongodb": "^3.2.7",
     "mongodb-autoincrement": "^1.0.1",
     "nodemon": "1.11.0",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.5.0",
     "ws": "^7.0.0"
   },
   "devDependencies": {
